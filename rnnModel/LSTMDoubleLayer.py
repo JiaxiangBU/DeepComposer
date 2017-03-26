@@ -30,3 +30,17 @@ class lstm_double:
                                           scope='second_layer')
 
         return batch_x, seq_length, second_out
+
+    def LSTM_step(self, first_state, second_state):
+        #first_state = self.first_cell.zero_state(batch_size, tf.float32)
+        #second_state = self.second_cell.zero_state(batch_size, tf.float32)
+
+        inputs = tf.placeholder(tf.float32, [None, self.input_dim])
+
+        with tf.variable_scope("pred") as scope:
+            out, first_state = self.first_cell(inputs, first_state)
+            scope.reuse_variables()
+            out, second_state = self.second_cell(out, second_state)
+
+        return inputs, first_state, second_state, out
+
